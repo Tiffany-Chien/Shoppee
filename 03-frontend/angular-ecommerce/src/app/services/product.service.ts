@@ -9,6 +9,7 @@ import { map } from 'rxjs/operators';
 })
 export class ProductService {
 
+  // Change page size to 100 items
   private baseUrl = 'http://localhost:8080/api/products';
 
   constructor(private httpClient: HttpClient) { }
