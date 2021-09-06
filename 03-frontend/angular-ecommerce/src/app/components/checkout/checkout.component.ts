@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { ShoppeeFormService } from 'src/app/services/shoppee-form.service';
+
 
 @Component({
   selector: 'app-checkout',
@@ -7,15 +9,20 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   styleUrls: ['./checkout.component.css']
 })
 export class CheckoutComponent implements OnInit {
+
   checkoutFormGroup: FormGroup;
-  
 
   totalPrice: number = 0;
   totalQuantity: number = 0;
   
-  constructor(private formBuilder: FormBuilder) { }
+  creditCardYears: number[] = [];
+  creditCardMonths: number[] = [];
+
+  constructor(private formBuilder: FormBuilder,
+              private shoppeeFormService: ShoppeeFormService) { }
 
   ngOnInit(): void {
+    
     this.checkoutFormGroup = this.formBuilder.group({
       customer: this.formBuilder.group({
         firstName: [''],
@@ -27,37 +34,89 @@ export class CheckoutComponent implements OnInit {
         city: [''],
         state: [''],
         country: [''],
-        zipCode: [''],
+        zipCode: ['']
       }),
       billingAddress: this.formBuilder.group({
         street: [''],
         city: [''],
         state: [''],
         country: [''],
-        zipCode: [''],
+        zipCode: ['']
       }),
-      creditCcard: this.formBuilder.group({
+      creditCard: this.formBuilder.group({
         cardType: [''],
         nameOnCard: [''],
         cardNumber: [''],
         securityCode: [''],
         expirationMonth: [''],
-        expirationYear: [''],
-      }),
+        expirationYear: ['']
+      })
     });
+
+    // populate credit card months
+
+    const startMonth: number = new Date().getMonth() + 1;
+    console.log("startMonth: " + startMonth);
+
+    this.shoppeeFormService.getCreditCardMonths(startMonth).subscribe(
+      data => {
+        console.log("Retrieved credit card months: " + JSON.stringify(data));
+        this.creditCardMonths = data;
+      }
+    );
+
+    // populate credit card years
+
+    this.shoppeeFormService.getCreditCardYears().subscribe(
+      data => {
+        console.log("Retrieved credit card years: " + JSON.stringify(data));
+        this.creditCardYears = data;
+      }
+    );
+
   }
 
   copyShippingAddressToBillingAddress(event) {
+
     if (event.target.checked) {
-      this.checkoutFormGroup.controls.billingAddress.setValue(this.checkoutFormGroup.controls.shippingAddress.value);
-    } else {
+      this.checkoutFormGroup.controls.billingAddress
+            .setValue(this.checkoutFormGroup.controls.shippingAddress.value);
+    }
+    else {
       this.checkoutFormGroup.controls.billingAddress.reset();
     }
+    
   }
 
   onSubmit() {
     console.log("Handling the submit button");
     console.log(this.checkoutFormGroup.get('customer').value);
+    console.log("The email address is " + this.checkoutFormGroup.get('customer').value.email);
   }
 
+  handleMonthsAndYears() {
+
+    const creditCardFormGroup = this.checkoutFormGroup.get('creditCard');
+
+    const currentYear: number = new Date().getFullYear();
+    const selectedYear: number = Number(creditCardFormGroup.value.expirationYear);
+
+    // if the current year equals the selected year, then start with the current month
+
+    let startMonth: number;
+
+    if (currentYear === selectedYear) {
+      startMonth = new Date().getMonth() + 1;
+    }
+    else {
+      startMonth = 1;
+    }
+
+    this.shoppeeFormService.getCreditCardMonths(startMonth).subscribe(
+      data => {
+        console.log("Retrieved credit card months: " + JSON.stringify(data));
+        this.creditCardMonths = data;
+      }
+    );
+  }
 }
