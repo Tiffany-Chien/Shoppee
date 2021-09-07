@@ -1,5 +1,7 @@
 # E Commerce Platform - Shoppee
 
+Backend part is added to `.gitignore` due to security.
+
 ## Fuctions Implemented
 
 1. Search by keyword/category
@@ -11,10 +13,14 @@
 3. Pagination
    ![Pagination](/project_showcase/Pagination.PNG)
    We added a feature by angular to let customer select how much item they want for each page, and button with boarders (max page show will be 5).
-4. Check out page
+4. Checkout page
 
 - Added forms for shipping address, billing address, and credit cart information
 - Added "Same as shipping address function"
+<!-- TODO -->
+
+5. Registration Page
+<!-- TODO -->
 
 <!-- ## Platform Structure
 ### Backend
