@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Country } from 'src/app/common/country';
+import { State } from 'src/app/common/state';
 import { ShoppeeFormService } from 'src/app/services/shoppee-form.service';
 
 
@@ -18,6 +19,10 @@ export class CheckoutComponent implements OnInit {
   
   creditCardYears: number[] = [];
   creditCardMonths: number[] = [];
+
+  shippingAddressStates: State[] = [];
+  billingAddressStates: State[] = [];
+    
 
   countries: Country[] = [];
   
@@ -125,6 +130,29 @@ export class CheckoutComponent implements OnInit {
       data => {
         console.log("Retrieved credit card months: " + JSON.stringify(data));
         this.creditCardMonths = data;
+      }
+    );
+  }
+
+  getStates(formGroupName: string) {
+    const formGroup = this.checkoutFormGroup.get(formGroupName);
+    const countryCode = formGroup.value.country.code;
+    // Debug usage: country Name 
+    const countryName = formGroup.value.country.name;
+    console.log(`{formGroupName} country code: ${countryCode}`);
+    console.log(`{formGroupName} country name: ${countryName}`);
+
+    this.shoppeeFormService.getStates(countryCode).subscribe(
+      data => {
+        // Check the form group name, assign state depend on formGroup
+        if (formGroupName === 'shippingAddress') {
+          this.shippingAddressStates = data;
+        } else {
+          this.billingAddressStates = data;
+        }
+
+        // select the first state as default
+        formGroup.get('state').setValue(data[0]);
       }
     );
   }
