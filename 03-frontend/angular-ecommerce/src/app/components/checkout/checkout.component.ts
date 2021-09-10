@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
+import { Country } from 'src/app/common/country';
 import { ShoppeeFormService } from 'src/app/services/shoppee-form.service';
 
 
@@ -18,6 +19,8 @@ export class CheckoutComponent implements OnInit {
   creditCardYears: number[] = [];
   creditCardMonths: number[] = [];
 
+  countries: Country[] = [];
+  
   constructor(private formBuilder: FormBuilder,
               private shoppeeFormService: ShoppeeFormService) { }
 
@@ -54,7 +57,6 @@ export class CheckoutComponent implements OnInit {
     });
 
     // populate credit card months
-
     const startMonth: number = new Date().getMonth() + 1;
     console.log("startMonth: " + startMonth);
 
@@ -66,11 +68,18 @@ export class CheckoutComponent implements OnInit {
     );
 
     // populate credit card years
-
     this.shoppeeFormService.getCreditCardYears().subscribe(
       data => {
         console.log("Retrieved credit card years: " + JSON.stringify(data));
         this.creditCardYears = data;
+      }
+    );
+
+    // populate the countries
+    this.shoppeeFormService.getCountries().subscribe(
+      data => {
+        console.log("Retrieved countries: " + JSON.stringify(data));
+        this.countries = data;
       }
     );
 
