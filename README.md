@@ -18,6 +18,7 @@ Backend part is added to `.gitignore` due to security.
 - Added forms for shipping address, billing address, and credit cart information
 - Added "Same as shipping address function"
 - Added selections to country while state(region) is synced with country (09092021)
+- Implementing the validation page (091822021): All fields required.
 <!-- TODO -->
 
 5. Registration Page
