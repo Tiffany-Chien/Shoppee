@@ -10,7 +10,8 @@ Backend part is added to `.gitignore` due to security.
    ![Checkout Page](/project_showcase/ShoppingCart.PNG)
    We can increment/decrement the Quantity of our product by clicking +/-.
    We can also remove the product from our shopping cart by clicking remove button.
-3. Pagination
+3. Pagination    
+   
    ![Pagination](/project_showcase/Pagination.PNG)
    We added a feature by angular to let customer select how much item they want for each page, and button with boarders (max page show will be 5).
 4. Checkout page
