@@ -34,3 +34,7 @@ Backend part is added to `.gitignore` due to security.
 - Angular
 - TypeScript
 - HTML/CSS -->
+
+
+## Credits
+1. CSS from [luv2code](http://www.luv2code.com/)
